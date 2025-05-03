@@ -121,18 +121,18 @@
   <div class="container">
     <h1>DFC Fixtures</h1>
     <div class="tabs">
-      <button class="tab active" id="tab-u10">U10 B Orange</button>
+      <button class="tab active" id="tab-combined">All Fixtures</button>
+      <button class="tab" id="tab-u10">U10 B Orange</button>
       <button class="tab" id="tab-u14">U14 A</button>
-      <button class="tab" id="tab-combined">All Fixtures</button>
     </div>
-    <div class="fixtures active" id="fixtures-u10">
+    <div class="fixtures active" id="fixtures-combined">
+      <ul class="fixture-list" id="list-combined"></ul>
+    </div>
+    <div class="fixtures" id="fixtures-u10">
       <ul class="fixture-list" id="list-u10"></ul>
     </div>
     <div class="fixtures" id="fixtures-u14">
       <ul class="fixture-list" id="list-u14"></ul>
-    </div>
-    <div class="fixtures" id="fixtures-combined">
-      <ul class="fixture-list" id="list-combined"></ul>
     </div>
   </div>
   <script>
@@ -165,22 +165,6 @@
     }
 
     // Tab switching
-    document.getElementById('tab-u10').onclick = function() {
-      document.getElementById('tab-u10').classList.add('active');
-      document.getElementById('tab-u14').classList.remove('active');
-      document.getElementById('tab-combined').classList.remove('active');
-      document.getElementById('fixtures-u10').classList.add('active');
-      document.getElementById('fixtures-u14').classList.remove('active');
-      document.getElementById('fixtures-combined').classList.remove('active');
-    };
-    document.getElementById('tab-u14').onclick = function() {
-      document.getElementById('tab-u14').classList.add('active');
-      document.getElementById('tab-u10').classList.remove('active');
-      document.getElementById('tab-combined').classList.remove('active');
-      document.getElementById('fixtures-u14').classList.add('active');
-      document.getElementById('fixtures-u10').classList.remove('active');
-      document.getElementById('fixtures-combined').classList.remove('active');
-    };
     document.getElementById('tab-combined').onclick = function() {
       document.getElementById('tab-combined').classList.add('active');
       document.getElementById('tab-u10').classList.remove('active');
@@ -188,6 +172,22 @@
       document.getElementById('fixtures-combined').classList.add('active');
       document.getElementById('fixtures-u10').classList.remove('active');
       document.getElementById('fixtures-u14').classList.remove('active');
+    };
+    document.getElementById('tab-u10').onclick = function() {
+      document.getElementById('tab-u10').classList.add('active');
+      document.getElementById('tab-combined').classList.remove('active');
+      document.getElementById('tab-u14').classList.remove('active');
+      document.getElementById('fixtures-u10').classList.add('active');
+      document.getElementById('fixtures-combined').classList.remove('active');
+      document.getElementById('fixtures-u14').classList.remove('active');
+    };
+    document.getElementById('tab-u14').onclick = function() {
+      document.getElementById('tab-u14').classList.add('active');
+      document.getElementById('tab-combined').classList.remove('active');
+      document.getElementById('tab-u10').classList.remove('active');
+      document.getElementById('fixtures-u14').classList.add('active');
+      document.getElementById('fixtures-combined').classList.remove('active');
+      document.getElementById('fixtures-u10').classList.remove('active');
     };
 
     // Embedded JSON data
