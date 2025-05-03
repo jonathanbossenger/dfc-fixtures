@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DFC Fixtures</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f7f7f7;
+      color: #222;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #ddd;
+      margin-bottom: 1rem;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 0.75rem 0;
+      cursor: pointer;
+      background: #eee;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .tab.active {
+      background: #fff;
+      border-bottom: 2px solid #007bff;
+      color: #007bff;
+      font-weight: bold;
+    }
+    .fixtures {
+      display: none;
+    }
+    .fixtures.active {
+      display: block;
+    }
+    .fixture-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .fixture {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      padding: 1rem;
+      border-left: 6px solid #ccc;
+      transition: border-color 0.2s;
+    }
+    .fixture.home {
+      border-left-color: #4caf50;
+      background: #eafbe7;
+    }
+    .fixture.away {
+      border-left-color: #2196f3;
+      background: #e7f1fb;
+    }
+    .fixture .date {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+    .fixture .opponent, .fixture .venue {
+      margin-bottom: 0.25rem;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 0.5rem;
+      }
+      .fixture {
+        padding: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>DFC Fixtures</h1>
+    <div class="tabs">
+      <button class="tab active" id="tab-u10">U10 Orange</button>
+      <button class="tab" id="tab-u14">U14 A</button>
+    </div>
+    <div class="fixtures active" id="fixtures-u10">
+      <ul class="fixture-list" id="list-u10"></ul>
+    </div>
+    <div class="fixtures" id="fixtures-u14">
+      <ul class="fixture-list" id="list-u14"></ul>
+    </div>
+  </div>
+  <script>
+    // Helper: parse date string to Date object (for both formats)
+    function parseFixtureDate(dateStr) {
+      // Try dd/mm/yy
+      if (/\d{2}\/\d{2}\/\d{2}/.test(dateStr)) {
+        const [d, m, y] = dateStr.split('/');
+        return new Date(`20${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`);
+      }
+      // Try '5 April '25
+      const match = dateStr.match(/(\d{1,2}) ([A-Za-z]+) '?(\d{2})/);
+      if (match) {
+        const [_, day, month, year] = match;
+        const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        const monthIdx = months.findIndex(m => m.toLowerCase() === month.toLowerCase());
+        if (monthIdx !== -1) {
+          return new Date(2000 + parseInt(year), monthIdx, parseInt(day));
+        }
+      }
+      return new Date(dateStr); // fallback
+    }
+
+    // Helper: is fixture in the future (today or later)
+    function isFutureFixture(dateStr) {
+      const fixtureDate = parseFixtureDate(dateStr);
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      return fixtureDate >= today;
+    }
+
+    // Tab switching
+    document.getElementById('tab-u10').onclick = function() {
+      document.getElementById('tab-u10').classList.add('active');
+      document.getElementById('tab-u14').classList.remove('active');
+      document.getElementById('fixtures-u10').classList.add('active');
+      document.getElementById('fixtures-u14').classList.remove('active');
+    };
+    document.getElementById('tab-u14').onclick = function() {
+      document.getElementById('tab-u14').classList.add('active');
+      document.getElementById('tab-u10').classList.remove('active');
+      document.getElementById('fixtures-u14').classList.add('active');
+      document.getElementById('fixtures-u10').classList.remove('active');
+    };
+
+    // Embedded JSON data
+    const u10Fixtures = [
+      {"date": "5 April '25", "location": "home", "opponent": "Bothasig AFC 2"},
+      {"date": "12 April '25", "location": "home", "opponent": "Hellenic"},
+      {"date": "26 April '25", "location": "away", "opponent": "Kuils River AFC"},
+      {"date": "03 May '25", "location": "home", "opponent": "Edgemead FC"},
+      {"date": "10 May '25", "location": "away", "opponent": "Bellville City"},
+      {"date": "17 May '25", "location": "away", "opponent": "Goodwood United FC"},
+      {"date": "24 May '25", "location": "home", "opponent": "YSD Macassar FC"},
+      {"date": "31 May '25", "location": "away", "opponent": "Northpine United FC"},
+      {"date": "07 June '25", "location": "home", "opponent": "DFC Yellow"},
+      {"date": "14 June '25", "location": "away", "opponent": "Holy Cross FC"},
+      {"date": "21 June '25", "location": "home", "opponent": "Bothasig AFC 1"},
+      {"date": "05 July '25", "location": "away", "opponent": "Vasco"},
+      {"date": "12 July '25", "location": "away", "opponent": "Table View"},
+      {"date": "19 July '25", "location": "home", "opponent": "Sunningdale"},
+      {"date": "26 July '25", "location": "away", "opponent": "De Beers AFC"},
+      {"date": "02 Aug '25", "location": "home", "opponent": "Kuils River AFC"},
+      {"date": "09 Aug '25", "location": "away", "opponent": "Edgemead FC"},
+      {"date": "16 Aug '25", "location": "home", "opponent": "Bellville City"},
+      {"date": "23 Aug '25", "location": "home", "opponent": "Goodwood United FC"},
+      {"date": "30 Aug '25", "location": "away", "opponent": "YSD Macassar FC"},
+      {"date": "06 Sept '25", "location": "home", "opponent": "Northpine United FC"},
+      {"date": "13 Sept '25", "location": "away", "opponent": "Bothasig AFC 1"},
+      {"date": "20 Sept '25", "location": "away", "opponent": "Sunningdale"}
+    ];
+    const u14Fixtures = [
+      {"date": "03/05/25", "time": "09:30", "home_team": "M2-02- Durbanville", "away_team": "M2-13- Tramway", "venue": "Durbanville Klazinga Park A"},
+      {"date": "04/05/25", "time": "12:15", "home_team": "M2-12- Sunningdale City", "away_team": "M2-02- Durbanville", "venue": "Sunningdale City Sunningdale A"},
+      {"date": "17/05/25", "time": "09:30", "home_team": "M2-04- Fish Hoek", "away_team": "M2-02- Durbanville", "venue": "Fish Hoek Fish Hoek A"},
+      {"date": "24/05/25", "time": "09:30", "home_team": "M2-10- Shosholoza", "away_team": "M2-02- Durbanville", "venue": "Pelican Heights Sports Ground Pelican A"},
+      {"date": "31/05/25", "time": "09:30", "home_team": "M2-06- Kensington", "away_team": "M2-02- Durbanville", "venue": "Kensington 14 Avenue A"},
+      {"date": "07/06/25", "time": "09:30", "home_team": "M2-02- Durbanville", "away_team": "M2-11- Stephanian Ottery", "venue": "Durbanville Klazinga Park A"},
+      {"date": "14/06/25", "time": "09:30", "home_team": "M2-14- Bye", "away_team": "M2-02- Durbanville", "venue": "Bye"},
+      {"date": "16/06/25", "time": "09:30", "home_team": "M2-02- Durbanville", "away_team": "M2-01- De Beers", "venue": "Durbanville Klazinga Park A"},
+      {"date": "28/06/25", "time": "09:30", "home_team": "M2-03- Edgemead G/W", "away_team": "M2-02- Durbanville", "venue": "Edgemead G/W Edgemead A"},
+      {"date": "05/07/25", "time": "09:30", "home_team": "M2-05- Grass Boots", "away_team": "M2-02- Durbanville", "venue": "Grass Boots Van Riebeeck Park, Sidmouth Road A"},
+      {"date": "12/07/25", "time": "09:30", "home_team": "M2-02- Durbanville", "away_team": "M2-04- Fish Hoek", "venue": "Durbanville Klazinga Park A"},
+      {"date": "19/07/25", "time": "09:30", "home_team": "M2-09- Saxon Rovers", "away_team": "M2-02- Durbanville", "venue": "Saxon Rovers Maitland A"},
+      {"date": "26/07/25", "time": "09:30", "home_team": "M2-02- Durbanville", "away_team": "M2-07- Norway Parks", "venue": "Durbanville Klazinga Park A"},
+      {"date": "02/08/25", "time": "09:30", "home_team": "M2-13- Tramway", "away_team": "M2-02- Durbanville", "venue": "Tramway Groenewald Park A"},
+      {"date": "09/08/25", "time": "09:30", "home_team": "M2-02- Durbanville", "away_team": "M2-12- Sunningdale City", "venue": "Durbanville Klazinga Park A"},
+      {"date": "16/08/25", "time": "09:30", "home_team": "M2-08- Nova Nacional", "away_team": "M2-02- Durbanville", "venue": "Nova Nacional Parklands Sports Complex A"},
+      {"date": "23/08/25", "time": "09:30", "home_team": "M2-02- Durbanville", "away_team": "M2-10- Shosholoza", "venue": "Durbanville Klazinga Park A"},
+      {"date": "31/08/25", "time": "12:15", "home_team": "M2-02- Durbanville", "away_team": "M2-06- Kensington", "venue": "Durbanville Klazinga Park A"},
+      {"date": "06/09/25", "time": "09:30", "home_team": "M2-11- Stephanian Ottery", "away_team": "M2-02- Durbanville", "venue": "Stephanian Ottery Stephanian Ottery A"},
+      {"date": "13/09/25", "time": "09:30", "home_team": "M2-02- Durbanville", "away_team": "M2-14- Bye", "venue": "Durbanville Klazinga Park A"}
+    ];
+
+    // Load and render fixtures
+    function renderU10(fixtures) {
+      const list = document.getElementById('list-u10');
+      list.innerHTML = '';
+      fixtures.filter(f => isFutureFixture(f.date)).forEach(f => {
+        const li = document.createElement('li');
+        li.className = 'fixture ' + (f.location === 'home' ? 'home' : 'away');
+        li.innerHTML = `
+          <span class="date">${f.date}</span>
+          <span class="opponent"><strong>Opponent:</strong> ${f.opponent}</span>
+          <span class="location"><strong>Location:</strong> ${f.location.charAt(0).toUpperCase() + f.location.slice(1)}</span>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function renderU14(fixtures) {
+      const list = document.getElementById('list-u14');
+      list.innerHTML = '';
+      fixtures.filter(f => isFutureFixture(f.date)).forEach(f => {
+        // Home if venue is Durbanville Klazinga Park A
+        const isHome = f.venue === 'Durbanville Klazinga Park A';
+        // Skip "Bye" games
+        if (f.venue === 'Bye') return;
+        li = document.createElement('li');
+        li.className = 'fixture ' + (isHome ? 'home' : 'away');
+        li.innerHTML = `
+          <span class="date">${f.date}${f.time ? ' ' + f.time : ''}</span>
+          <span class="opponent"><strong>${isHome ? 'Vs' : 'At'}:</strong> ${isHome ? f.away_team : f.home_team}</span>
+          <span class="venue"><strong>Venue:</strong> ${f.venue}</span>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    // Fetch JSON files and render
+    // fetch('dfc-u10-orange.json')
+    //   .then(r => r.json())
+    //   .then(renderU10);
+    // fetch('dfc-u14-a.json')
+    //   .then(r => r.json())
+    //   .then(renderU14);
+    renderU10(u10Fixtures);
+    renderU14(u14Fixtures);
+  </script>
+</body>
+</html> 

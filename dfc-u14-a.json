@@ -1,0 +1,142 @@
+[
+  {
+    "date": "03/05/25",
+    "time": "09:30",
+    "home_team": "M2-02- Durbanville",
+    "away_team": "M2-13- Tramway",
+    "venue": "Durbanville Klazinga Park A"
+  },
+  {
+    "date": "04/05/25",
+    "time": "12:15",
+    "home_team": "M2-12- Sunningdale City",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Sunningdale City Sunningdale A"
+  },
+  {
+    "date": "17/05/25",
+    "time": "09:30",
+    "home_team": "M2-04- Fish Hoek",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Fish Hoek Fish Hoek A"
+  },
+  {
+    "date": "24/05/25",
+    "time": "09:30",
+    "home_team": "M2-10- Shosholoza",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Pelican Heights Sports Ground Pelican A"
+  },
+  {
+    "date": "31/05/25",
+    "time": "09:30",
+    "home_team": "M2-06- Kensington",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Kensington 14 Avenue A"
+  },
+  {
+    "date": "07/06/25",
+    "time": "09:30",
+    "home_team": "M2-02- Durbanville",
+    "away_team": "M2-11- Stephanian Ottery",
+    "venue": "Durbanville Klazinga Park A"
+  },
+  {
+    "date": "14/06/25",
+    "time": "09:30",
+    "home_team": "M2-14- Bye",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Bye"
+  },
+  {
+    "date": "16/06/25",
+    "time": "09:30",
+    "home_team": "M2-02- Durbanville",
+    "away_team": "M2-01- De Beers",
+    "venue": "Durbanville Klazinga Park A"
+  },
+  {
+    "date": "28/06/25",
+    "time": "09:30",
+    "home_team": "M2-03- Edgemead G/W",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Edgemead G/W Edgemead A"
+  },
+  {
+    "date": "05/07/25",
+    "time": "09:30",
+    "home_team": "M2-05- Grass Boots",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Grass Boots Van Riebeeck Park, Sidmouth Road A"
+  },
+  {
+    "date": "12/07/25",
+    "time": "09:30",
+    "home_team": "M2-02- Durbanville",
+    "away_team": "M2-04- Fish Hoek",
+    "venue": "Durbanville Klazinga Park A"
+  },
+  {
+    "date": "19/07/25",
+    "time": "09:30",
+    "home_team": "M2-09- Saxon Rovers",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Saxon Rovers Maitland A"
+  },
+  {
+    "date": "26/07/25",
+    "time": "09:30",
+    "home_team": "M2-02- Durbanville",
+    "away_team": "M2-07- Norway Parks",
+    "venue": "Durbanville Klazinga Park A"
+  },
+  {
+    "date": "02/08/25",
+    "time": "09:30",
+    "home_team": "M2-13- Tramway",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Tramway Groenewald Park A"
+  },
+  {
+    "date": "09/08/25",
+    "time": "09:30",
+    "home_team": "M2-02- Durbanville",
+    "away_team": "M2-12- Sunningdale City",
+    "venue": "Durbanville Klazinga Park A"
+  },
+  {
+    "date": "16/08/25",
+    "time": "09:30",
+    "home_team": "M2-08- Nova Nacional",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Nova Nacional Parklands Sports Complex A"
+  },
+  {
+    "date": "23/08/25",
+    "time": "09:30",
+    "home_team": "M2-02- Durbanville",
+    "away_team": "M2-10- Shosholoza",
+    "venue": "Durbanville Klazinga Park A"
+  },
+  {
+    "date": "31/08/25",
+    "time": "12:15",
+    "home_team": "M2-02- Durbanville",
+    "away_team": "M2-06- Kensington",
+    "venue": "Durbanville Klazinga Park A"
+  },
+  {
+    "date": "06/09/25",
+    "time": "09:30",
+    "home_team": "M2-11- Stephanian Ottery",
+    "away_team": "M2-02- Durbanville",
+    "venue": "Stephanian Ottery Stephanian Ottery A"
+  },
+  {
+    "date": "13/09/25",
+    "time": "09:30",
+    "home_team": "M2-02- Durbanville",
+    "away_team": "M2-14- Bye",
+    "venue": "Durbanville Klazinga Park A"
+  }
+]
