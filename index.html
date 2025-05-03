@@ -79,6 +79,34 @@
     .fixture .opponent, .fixture .venue {
       margin-bottom: 0.25rem;
     }
+    .date-separator {
+      text-align: center;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+    .date-separator::before,
+    .date-separator::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background: #ddd;
+    }
+    .date-separator::before {
+      left: 0;
+    }
+    .date-separator::after {
+      right: 0;
+    }
+    .date-separator span {
+      background: #f7f7f7;
+      padding: 0 1rem;
+      position: relative;
+      z-index: 1;
+      color: #666;
+      font-weight: bold;
+    }
     @media (max-width: 600px) {
       .container {
         padding: 0.5rem;
@@ -95,12 +123,16 @@
     <div class="tabs">
       <button class="tab active" id="tab-u10">U10 B Orange</button>
       <button class="tab" id="tab-u14">U14 A</button>
+      <button class="tab" id="tab-combined">All Fixtures</button>
     </div>
     <div class="fixtures active" id="fixtures-u10">
       <ul class="fixture-list" id="list-u10"></ul>
     </div>
     <div class="fixtures" id="fixtures-u14">
       <ul class="fixture-list" id="list-u14"></ul>
+    </div>
+    <div class="fixtures" id="fixtures-combined">
+      <ul class="fixture-list" id="list-combined"></ul>
     </div>
   </div>
   <script>
@@ -136,14 +168,26 @@
     document.getElementById('tab-u10').onclick = function() {
       document.getElementById('tab-u10').classList.add('active');
       document.getElementById('tab-u14').classList.remove('active');
+      document.getElementById('tab-combined').classList.remove('active');
       document.getElementById('fixtures-u10').classList.add('active');
       document.getElementById('fixtures-u14').classList.remove('active');
+      document.getElementById('fixtures-combined').classList.remove('active');
     };
     document.getElementById('tab-u14').onclick = function() {
       document.getElementById('tab-u14').classList.add('active');
       document.getElementById('tab-u10').classList.remove('active');
+      document.getElementById('tab-combined').classList.remove('active');
       document.getElementById('fixtures-u14').classList.add('active');
       document.getElementById('fixtures-u10').classList.remove('active');
+      document.getElementById('fixtures-combined').classList.remove('active');
+    };
+    document.getElementById('tab-combined').onclick = function() {
+      document.getElementById('tab-combined').classList.add('active');
+      document.getElementById('tab-u10').classList.remove('active');
+      document.getElementById('tab-u14').classList.remove('active');
+      document.getElementById('fixtures-combined').classList.add('active');
+      document.getElementById('fixtures-u10').classList.remove('active');
+      document.getElementById('fixtures-u14').classList.remove('active');
     };
 
     // Embedded JSON data
@@ -232,6 +276,80 @@
       });
     }
 
+    function renderCombined(u10Fixtures, u14Fixtures) {
+      const list = document.getElementById('list-combined');
+      list.innerHTML = '';
+      
+      // Combine and sort all fixtures
+      const allFixtures = [];
+      
+      // Process U10 fixtures
+      u10Fixtures.filter(f => isFutureFixture(f.date)).forEach(f => {
+        allFixtures.push({
+          date: f.date,
+          team: 'U10 B Orange',
+          isHome: f.location === 'home',
+          opponent: f.opponent,
+          location: f.location,
+          time: null
+        });
+      });
+
+      // Process U14 fixtures
+      u14Fixtures.filter(f => isFutureFixture(f.date)).forEach(f => {
+        if (f.venue === 'Bye') return;
+        const isHome = f.venue === 'Durbanville Klazinga Park A';
+        allFixtures.push({
+          date: f.date,
+          team: 'U14 A',
+          isHome: isHome,
+          opponent: isHome ? f.away_team : f.home_team,
+          venue: f.venue,
+          time: f.time
+        });
+      });
+
+      // Sort all fixtures by date
+      allFixtures.sort((a, b) => {
+        const dateA = parseFixtureDate(a.date);
+        const dateB = parseFixtureDate(b.date);
+        return dateA - dateB;
+      });
+
+      // Render fixtures with date separators
+      let currentDate = null;
+      allFixtures.forEach(f => {
+        // Add date separator if date has changed
+        if (currentDate !== f.date) {
+          currentDate = f.date;
+          const separator = document.createElement('div');
+          separator.className = 'date-separator';
+          separator.innerHTML = `<span>${f.date}</span>`;
+          list.appendChild(separator);
+        }
+
+        const li = document.createElement('li');
+        li.className = 'fixture ' + (f.isHome ? 'home' : 'away');
+        
+        if (f.team === 'U10 B Orange') {
+          li.innerHTML = `
+            <span class="team"><strong>Team:</strong> ${f.team}</span>
+            <span class="opponent"><strong>Opponent:</strong> ${f.opponent}</span>
+            <span class="location"><strong>Location:</strong> ${f.location.charAt(0).toUpperCase() + f.location.slice(1)}</span>
+          `;
+        } else {
+          li.innerHTML = `
+            <span class="team"><strong>Team:</strong> ${f.team}</span>
+            <span class="opponent"><strong>${f.isHome ? 'Vs' : 'At'}:</strong> ${f.opponent}</span>
+            <span class="venue"><strong>Venue:</strong> ${f.venue}</span>
+            ${f.time ? `<span class="time"><strong>Time:</strong> ${f.time}</span>` : ''}
+          `;
+        }
+        
+        list.appendChild(li);
+      });
+    }
+
     // Fetch JSON files and render
     // fetch('dfc-u10-orange.json')
     //   .then(r => r.json())
@@ -241,6 +359,7 @@
     //   .then(renderU14);
     renderU10(u10Fixtures);
     renderU14(u14Fixtures);
+    renderCombined(u10Fixtures, u14Fixtures);
   </script>
 </body>
 </html> 
